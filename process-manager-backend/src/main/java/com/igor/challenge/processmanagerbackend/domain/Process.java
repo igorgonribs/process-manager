@@ -10,11 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Process {
 
 	@Id
@@ -24,13 +28,13 @@ public class Process {
 	private String description;
 	private Integer status;
 	private Date expectedReportDate;
-	
+
 	@OneToOne
 	@JoinColumn(name = "report")
 	private Report report;
 
 	@OneToOne
 	@JoinColumn(name = "created_by")
-	private User createdBy;	
+	private User createdBy;
 
 }
