@@ -7,7 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +29,13 @@ public class Report {
 	private String description;
 	private Date reportDate;
 
-	@OneToOne
-	@JoinColumn(name = "responsible")
-	private User responsible;
+	@ManyToOne
+	@JoinColumn(name = "writer")
+	private User writer;
+
+	@ManyToOne
+	@JoinColumn(name = "process_id")
+	@JsonIgnore
+	private Process process;
 
 }

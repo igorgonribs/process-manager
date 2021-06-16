@@ -28,7 +28,8 @@ public class ProcessController {
 
 	@GetMapping
 	public ResponseEntity<List<Process>> findAll() {
-		return ResponseEntity.ok().body(service.findAll());
+		List<Process> list = service.findAll();
+		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value = "{id}")
