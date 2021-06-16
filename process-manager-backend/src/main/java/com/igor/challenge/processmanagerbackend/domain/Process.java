@@ -1,4 +1,4 @@
-package com.igor.challenge.processmanagerbackend.entity;
+package com.igor.challenge.processmanagerbackend.domain;
 
 import java.util.Date;
 
@@ -9,25 +9,28 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Entity
 @Data
-public class Report {
+@AllArgsConstructor
+public class Process {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	private String name;
 	private String description;
-	private Date reportDate;
-
-	@OneToOne
-	@JoinColumn(name = "responsible")
-	private User responsible;
 	private Integer status;
+	private Date expectedReportDate;
 	
 	@OneToOne
-	@JoinColumn(name = "process")
+	@JoinColumn(name = "report")
 	private Report report;
+
+	@OneToOne
+	@JoinColumn(name = "created_by")
+	private User createdBy;	
 
 }

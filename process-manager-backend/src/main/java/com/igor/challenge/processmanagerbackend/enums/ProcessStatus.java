@@ -5,11 +5,11 @@ import lombok.Getter;
 @Getter
 public enum ProcessStatus {
 
-	OPENED(1, "Opened"),
+	CREATED(1, "Created"),
 	RUNNING(2, "Running"),
 	WAITING_REPORT(3, "Waiting Report"),
-	REPORTED(4, "Reported"),
-	DONE(5, "Done"),
+	SUCCESS(4, "Success"),
+	FAILED(5, "Failed"),
 	CANCELED(6, "Canceled");
 	
 	private Integer id;

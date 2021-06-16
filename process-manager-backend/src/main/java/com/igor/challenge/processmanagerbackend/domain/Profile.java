@@ -1,4 +1,4 @@
-package com.igor.challenge.processmanagerbackend.entity;
+package com.igor.challenge.processmanagerbackend.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

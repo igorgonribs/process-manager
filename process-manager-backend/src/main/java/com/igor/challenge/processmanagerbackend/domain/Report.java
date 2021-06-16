@@ -1,6 +1,7 @@
-package com.igor.challenge.processmanagerbackend.entity;
+package com.igor.challenge.processmanagerbackend.domain;
 
-import javax.persistence.Column;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,22 +9,24 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-public class User {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Report {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column(unique = true)
-	private String cpf;
-
-	private String name;
+	private String description;
+	private Date reportDate;
 
 	@OneToOne
-	@JoinColumn(name = "user_profile")
-	private Profile profile;
+	@JoinColumn(name = "responsible")
+	private User responsible;
+
 }
