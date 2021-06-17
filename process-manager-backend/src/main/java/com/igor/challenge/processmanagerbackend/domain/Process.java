@@ -15,7 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(value = Include.NON_NULL)
 public class Process {
 
 	@Id
@@ -42,7 +44,7 @@ public class Process {
 	private List<User> users = new ArrayList<>();
 
 	@OneToMany(mappedBy = "process", cascade = CascadeType.ALL)
-	private List<Report> reports = new ArrayList<>();;
+	private List<Report> reports = new ArrayList<>();
 
 	@OneToOne
 	@JoinColumn(name = "created_by")

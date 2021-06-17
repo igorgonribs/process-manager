@@ -7,7 +7,7 @@ import com.igor.challenge.processmanagerbackend.domain.User;
 
 public interface UserService {
 
-	User add(User user);
+	User add(User newUser);
 
 	User update(User user);
 

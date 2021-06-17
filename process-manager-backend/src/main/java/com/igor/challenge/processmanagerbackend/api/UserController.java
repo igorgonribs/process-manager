@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,14 +30,14 @@ public class UserController {
 	public ResponseEntity<List<User>> findAll() {
 		return ResponseEntity.ok().body(service.findAll());
 	}
-	
+
 	@GetMapping(value = "{id}")
 	public ResponseEntity<User> findById(@PathVariable(value = "id") Integer id) {
 		return ResponseEntity.ok().body(service.findById(id).get());
 	}
 
 	@PostMapping
-	public ResponseEntity<User> addUser(User user) throws URISyntaxException {
+	public ResponseEntity<User> addUser(@RequestBody User user) throws URISyntaxException {
 		user = service.add(user);
 		URI createdUserUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId())
 				.toUri();
@@ -44,13 +45,13 @@ public class UserController {
 	}
 
 	@PutMapping
-	public ResponseEntity<User> updateUser(User user) throws URISyntaxException {
+	public ResponseEntity<User> updateUser(@RequestBody User user) throws URISyntaxException {
 		user = service.update(user);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping(value = "{id}")
-	public ResponseEntity<User> deleteUser(@PathVariable(value = "id")Integer id) throws URISyntaxException {
+	public ResponseEntity<User> deleteUser(@PathVariable(value = "id") Integer id) throws URISyntaxException {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}

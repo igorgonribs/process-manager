@@ -1,17 +1,16 @@
 package com.igor.challenge.processmanagerbackend.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.igor.challenge.processmanagerbackend.domain.Process;
+import com.igor.challenge.processmanagerbackend.dto.ProcessDto;
 
 public interface ProcessService {
-	List<Process> findAll();
+	List<ProcessDto> findAll() throws Exception;
 
-	Optional<Process> findById(Integer id);
+	ProcessDto findById(Integer id) throws Exception;
 
-	Process add(Process process);
+	ProcessDto add(ProcessDto dto) throws Exception;
 
-	Process update(Process process);
+	ProcessDto update(ProcessDto dto) throws Exception;
 
 }

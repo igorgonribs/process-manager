@@ -13,6 +13,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +26,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(value = Include.NON_NULL)
 public class User {
 
 	@Id
@@ -41,5 +44,5 @@ public class User {
 
 	@ManyToMany(mappedBy = "users")
 	@JsonIgnore
-	private List<Process> process = new ArrayList<>();;
+	private List<Process> processes = new ArrayList<>();;
 }
