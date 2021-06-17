@@ -1,0 +1,71 @@
+.Processes {
+  text-align: center;
+}
+
+.Processes-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Page-title-text {
+  padding-left: 12px;
+}
+
+.Header-title {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.Processes-card-list {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.Processes-card-item {
+  display: flex;
+  flex-direction: row;
+  flex: 3;
+  align-items: center;
+  justify-content: center;
+  margin: 12px;
+  width: 360px;
+  border-radius: 8px;
+}
+
+.Processes-card-process {
+  background-color: rgb(0, 156, 0);
+}
+
+.Processes-card-process:hover {
+  background-color: rgb(35, 168, 35);
+  cursor: pointer;
+}
+
+.Processes-card-user {
+  background-color: blue;
+}
+
+.Processes-card-user:hover {
+  background-color: rgb(80, 80, 230);
+  cursor: pointer;
+}
+
+.Processes-card-report {
+  background-color: purple;
+}
+
+.Processes-card-report:hover {
+  background-color: rgb(148, 0, 148);
+  cursor: pointer;
+}
+
