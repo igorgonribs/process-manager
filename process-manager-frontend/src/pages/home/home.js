@@ -6,9 +6,9 @@ function Home() {
     return (
         <div className="Home">
             <header className="Home-header">
-                <div className="Header-title">
+                <div className="Home-Header-title">
                     <FiCodesandbox size="128" />
-                    <h2 className="Page-title-text">Bem Vindo User</h2>
+                    <h2 className="Home-Page-title-text">Bem Vindo User</h2>
                 </div>
                 <div className="Home-card-list">
                     <Link to="./processes/" className="Home-card-item Home-card-process">

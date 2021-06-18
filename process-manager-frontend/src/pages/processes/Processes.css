@@ -1,37 +1,52 @@
+@import './../../utils/colors.css';
+
 .Processes {
+  flex:1;
+  display: flex;
   text-align: center;
+  flex-direction: column;
 }
 
 .Processes-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  flex: 1;
+  background-color: var(--primaryDark);
+  min-height: 30vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: var(--white);
 }
 
-.Page-title-text {
-  padding-left: 12px;
+.Processes-body {
+  flex: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primaryDark);
 }
 
-.Header-title {
-  flex: 1;
+.Processes-Header-title {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
-.Processes-card-list {
-  flex: 3;
-  display: flex;
-  flex-direction: column;
+.Processes-Page-title-text {
+  padding-left: 12px;
 }
 
-.Processes-card-item {
+.Processes-list {
+  height: 100%;
+  flex-direction: column;
+  width: 80%;
+  background-color: var(--white);
+  color: var(--white);
+  border-radius: 8px;
+}
+
+.Processes-item {
   display: flex;
   flex-direction: row;
   flex: 3;
@@ -43,29 +58,36 @@
 }
 
 .Processes-card-process {
-  background-color: rgb(0, 156, 0);
+  background-color: var(--primaryProcess);
 }
 
 .Processes-card-process:hover {
-  background-color: rgb(35, 168, 35);
+  background-color: var(--primaryProcessHover);
   cursor: pointer;
 }
 
-.Processes-card-user {
-  background-color: blue;
+.Processes-card-Process {
+  background-color: var(--primaryProcess);
 }
 
-.Processes-card-user:hover {
-  background-color: rgb(80, 80, 230);
+.Processes-card-Process:hover {
+  background-color: var(--primaryProcessHover);
   cursor: pointer;
 }
 
 .Processes-card-report {
-  background-color: purple;
+  background-color: var(--primaryReports);
 }
 
 .Processes-card-report:hover {
-  background-color: rgb(148, 0, 148);
+  background-color: var(--primaryReportsHover);
   cursor: pointer;
 }
 
+.Processes-Button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  padding-top: 12px;
+}

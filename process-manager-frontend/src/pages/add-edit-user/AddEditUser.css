@@ -1,24 +1,10 @@
 @import './../../utils/colors.css';
 
-.Reports {
+.AddEditUser {
   text-align: center;
 }
 
-.Reports-header {
-  background-color: var(--primaryDark);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--white);
-}
-
-.Reports-Page-title-text {
-  padding-left: 12px;
-}
-
-.Reports-Header-title {
+.AddEditUser-Header-title {
   flex: 1;
   display: flex;
   flex-direction: row;
@@ -26,13 +12,11 @@
   justify-content: center;
 }
 
-.Reports-card-list {
-  flex: 3;
-  display: flex;
-  flex-direction: column;
+.AddEditUser-Page-title-text {
+  padding-left: 12px;
 }
 
-.Reports-card-item {
+.AddEditUser-item {
   display: flex;
   flex-direction: row;
   flex: 3;
@@ -43,30 +27,37 @@
   border-radius: 8px;
 }
 
-.Reports-card-process {
+.AddEditUser-card-process {
   background-color: var(--primaryProcess);
 }
 
-.Reports-card-process:hover {
+.AddEditUser-card-process:hover {
   background-color: var(--primaryProcessHover);
   cursor: pointer;
 }
 
-.Reports-card-user {
+.AddEditUser-card-user {
   background-color: var(--primaryUser);
 }
 
-.Reports-card-user:hover {
+.AddEditUser-card-user:hover {
   background-color: var(--primaryUserHover);
   cursor: pointer;
 }
 
-.Reports-card-report {
+.AddEditUser-card-report {
   background-color: var(--primaryReports);
 }
 
-.Reports-card-report:hover {
+.AddEditUser-card-report:hover {
   background-color: var(--primaryReportsHover);
   cursor: pointer;
 }
 
+.AddEditUser-Button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  padding-top: 12px;
+}

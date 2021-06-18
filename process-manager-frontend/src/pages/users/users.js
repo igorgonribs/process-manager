@@ -1,18 +1,21 @@
-import { FiUserCheck, } from 'react-icons/fi';
+import { FiUserCheck } from 'react-icons/fi';
+import UserList from './../../components/user-list/user-list';
 import './Users.css';
 
 function Users() {
     return (
         <div className="Users">
-            <header className="Users-header">
-                <div className="Header-title">
+            <div className="Users-header">
+                <div className="Users-Header-title">
                     <FiUserCheck size="128" />
-                    <h2 className="Page-title-text">Página de usuários</h2>
+                    <h2 className="Users-Page-title-text">Gerenciar usuários</h2>
                 </div>
-                <div className="Users-card-list">
-
+            </div>
+            <div className="Users-body">
+                <div className="Users-list">
+                    <UserList />
                 </div>
-            </header>
+            </div>
         </div>
     );
 }

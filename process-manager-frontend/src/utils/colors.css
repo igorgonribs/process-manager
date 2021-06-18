@@ -1,0 +1,17 @@
+:root {
+    --primaryDark: #282c34;
+    --secondaryDark: #FFFFFF;
+    --primaryLight: #FFFFFF;
+    --secondaryDark: #282c34;
+    --primaryProcess: #009c00;
+    --secondaryProcess: #9C009C;
+    --primaryProcessHover: #23a823;
+    --primaryReports: #800080;
+    --secondaryReports: #008000;
+    --primaryReportsHover: #940094;
+    --primaryUser: #0000FF;
+    --secondaryUser: #FFFF00;
+    --primaryUserHover: #5050e6;
+    --white: #FFFFFF;
+    background-color: var(--primaryDark);
+}
