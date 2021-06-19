@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.igor.challenge.processmanagerbackend.domain.User;
+import com.igor.challenge.processmanagerbackend.exception.DataIntegrityException;
 
 public interface UserService {
 
@@ -11,7 +12,7 @@ public interface UserService {
 
 	User update(User user);
 
-	void delete(Integer id);
+	void delete(Integer id) throws DataIntegrityException ;
 
 	List<User> findAll();
 

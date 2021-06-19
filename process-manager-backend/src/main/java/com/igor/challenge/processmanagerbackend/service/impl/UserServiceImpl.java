@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.igor.challenge.processmanagerbackend.domain.User;
+import com.igor.challenge.processmanagerbackend.exception.DataIntegrityException;
 import com.igor.challenge.processmanagerbackend.repository.UserRepository;
 import com.igor.challenge.processmanagerbackend.service.UserService;
 
@@ -32,10 +34,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void delete(Integer id) {
+	public void delete(Integer id) throws DataIntegrityException {
 		User userToDelete = new User();
 		userToDelete.setId(id);
-		repository.delete(userToDelete);
+		try {
+			repository.delete(userToDelete);
+		} catch (DataIntegrityViolationException ex) {
+			throw new DataIntegrityException("Não foi possível remover o usuário pois este usuário tem processos relacionados a ele.");
+		}	
 	}
 
 	@Override

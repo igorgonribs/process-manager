@@ -21,7 +21,7 @@ import com.igor.challenge.processmanagerbackend.service.UserService;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends ParentController {
 
 	@Autowired
 	private UserService service;
@@ -44,14 +44,14 @@ public class UserController {
 		return ResponseEntity.created(createdUserUri).body(user);
 	}
 
-	@PutMapping
+	@PutMapping()
 	public ResponseEntity<User> updateUser(@RequestBody User user) throws URISyntaxException {
 		user = service.update(user);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping(value = "{id}")
-	public ResponseEntity<User> deleteUser(@PathVariable(value = "id") Integer id) throws URISyntaxException {
+	public ResponseEntity<User> deleteUser(@PathVariable(value = "id") Integer id) throws Exception {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}

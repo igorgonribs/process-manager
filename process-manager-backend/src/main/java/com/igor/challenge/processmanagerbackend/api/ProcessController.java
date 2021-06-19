@@ -20,7 +20,7 @@ import com.igor.challenge.processmanagerbackend.service.ProcessService;
 
 @RestController
 @RequestMapping(value = "/process")
-public class ProcessController {
+public class ProcessController extends ParentController {
 
 	@Autowired
 	private ProcessService service;

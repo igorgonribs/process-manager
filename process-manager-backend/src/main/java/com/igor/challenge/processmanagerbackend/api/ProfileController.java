@@ -13,7 +13,7 @@ import com.igor.challenge.processmanagerbackend.service.ProfileService;
 
 @RestController
 @RequestMapping("/profile")
-public class ProfileController {
+public class ProfileController extends ParentController {
 
 	@Autowired
 	private ProfileService service;
