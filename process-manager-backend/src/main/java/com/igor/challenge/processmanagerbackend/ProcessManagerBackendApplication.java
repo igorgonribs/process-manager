@@ -82,13 +82,16 @@ public class ProcessManagerBackendApplication implements CommandLineRunner {
 		reportRepository.saveAll(Arrays.asList(report1, report2, report3));
 
 		// Set reports on processes
+		process1.setUsers(Arrays.asList(normalUser, adminUser));
+		process2.setUsers(Arrays.asList(normalUser, adminUser));
+		process3.setUsers(Arrays.asList(normalUser, adminUser));
 		process4.setReports(Arrays.asList(report1));
 		process4.setUsers(Arrays.asList(normalUser, adminUser));
 		process5.setReports(Arrays.asList(report2));
 		process5.setUsers(Arrays.asList(normalUser));
 		process6.setReports(Arrays.asList(report3));
 		process6.setUsers(Arrays.asList(normalUser));
-		processRepository.saveAll(Arrays.asList(process4, process5, process6));
+		processRepository.saveAll(Arrays.asList(process1, process2, process3, process4, process5, process6));
 
 	}
 

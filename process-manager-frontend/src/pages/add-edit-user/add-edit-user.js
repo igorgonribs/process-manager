@@ -38,7 +38,6 @@ function AddEditUser() {
         setCurrentOperation(operations.find(x => x.name == operation));
         if (id)
             api.get(`user/${id}`).then(response => {
-                console.log("Usuário atualizado");
                 setCurrentUser(response.data);
                 setFieldName(response.data.name);
                 setFieldCpf(response.data.cpf);
@@ -46,11 +45,6 @@ function AddEditUser() {
                 setLoading(false);
             })
     }, []);
-
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
 
     const handleClose = () => {
         setOpen(false);
@@ -70,7 +64,10 @@ function AddEditUser() {
                 setOpen(true);
             })
                 .catch(error => {
-                    handleClickOpen();
+                    setModalTitle("OPS...");
+                    setModalText("Ocorreu um erro...");
+                    setModalButtons(["OK"]);
+                    setOpen(true);
                     setLoading(false);
                 });
         else
@@ -84,7 +81,10 @@ function AddEditUser() {
                 setOpen(true);
             })
                 .catch(error => {
-                    handleClickOpen();
+                    setModalTitle("OPS...");
+                    setModalText("Ocorreu um erro...");
+                    setModalButtons(["OK"]);
+                    setOpen(true);
                     setLoading(false);
                 });
     }

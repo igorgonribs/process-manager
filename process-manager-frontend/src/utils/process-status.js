@@ -34,3 +34,11 @@ export const statusList = [
 export const resolveStatusColorByStatusId = (status) => {
     return statusList.find(x => x.label.toUpperCase() == status.toUpperCase()).color;
 }
+
+export const resolveStatusIdByStatusName = (statusName) => {
+    return statusList.find(x => x.label.toUpperCase() == statusName.toUpperCase()).id;
+}
+
+export const resolveStatusNameByStatusId = (statusId) => {
+    return statusList.find(x => x.id == statusId).label;
+}

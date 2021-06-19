@@ -9,9 +9,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { operations } from './../../utils/operations';
+import { resolveStatusIdByStatusName, resolveStatusNameByStatusId } from '../../utils/process-status';
+import api from '../../services/api';
 import './AddEditProcess.css';
 
 function arrayMove(array, from, to) {
@@ -20,16 +22,14 @@ function arrayMove(array, from, to) {
     return array;
 }
 
-const colourOptions = [
-    {
-        label: "Igor", value: "1"
-    },
-    {
-        label: "Maria", value: "2"
-    },
-    {
-        label: "José", value: "3"
-    }];
+const convertJavascriptDateToBackendDate = (date) => {
+    const day = date.split("T")[0].split("-")[2];
+    const month = date.split("T")[0].split("-")[1];
+    const year = date.split("T")[0].split("-")[0];
+    const hours = date.split("T")[1].split(":")[0];
+    const mins = date.split("T")[1].split(":")[1];
+    return `${day}/${month}/${year} ${hours}:${mins}`;
+}
 
 const SortableMultiValue = SortableElement(props => {
     const onMouseDown = e => {
@@ -49,32 +49,58 @@ const SortableSelect = SortableContainer(Select);
 
 function AddEditProcess() {
 
-    let { operation } = useParams();
+    let { operation, id } = useParams();
+    let history = useHistory();
 
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
-    const [selected, setSelected] = React.useState([]);
     const [currentOperation, setCurrentOperation] = React.useState(null);
+    const [userOperatorList, setUserOperatorList] = React.useState([]);
+    const [currentProcess, setCurrentProcess] = React.useState({});
 
-    const onChange = selectedOptions => setSelected(selectedOptions);
+    // Campos
+    const [fieldName, setFieldName] = React.useState("");
+    const [fieldDeadline, setFieldDeadline] = React.useState(new Date());
+    const [fieldResponsibles, setFieldResponsibles] = React.useState([]);
+    const [fieldDescription, setFieldDescription] = React.useState("");
+    const [fieldStatus, setFieldStatus] = React.useState(1);
 
+    // Modal
+    const [modalTitle, setModalTitle] = React.useState("");
+    const [modalText, setModalText] = React.useState("");
+    const [modalButtons, setModalButtons] = React.useState([]);
+
+    // Configura operação [add, edit, view]
     React.useEffect(() => {
-        console.log("Inside useEffect");
-        console.log(operation);
-        setCurrentOperation(operations.filter(x => x.name == operation)[0]);
+        setCurrentOperation(operations.find(x => x.name == operation));
+        if (id)
+            api.get(`process/${id}`).then(response => {
+                setCurrentProcess(response.data);
+                setFieldName(response.data.name);
+                setFieldDeadline(convertBackenddateToJavascriptDate(response.data.expectedReportDate));
+                setFieldDescription(response.data.description);
+                setFieldStatus(resolveStatusIdByStatusName(response.data.status));
+                setFieldResponsibles(response.data.users.map(x => { return { value: x.id.toString(), label: x.name } }));
+                setLoading(false);
+            })
+    }, []);
+
+    // Busca usuários operadores
+    React.useEffect(() => {
+        api.get("user").then(response => {
+            const usersList = response.data.map(x => { return { value: x.id.toString(), label: x.name } });
+            setUserOperatorList(usersList);
+        }
+        )
     }, []);
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
-        const newValue = arrayMove(selected, oldIndex, newIndex);
-        setSelected(newValue);
+        const newValue = arrayMove(fieldResponsibles, oldIndex, newIndex);
+        setFieldResponsibles(newValue);
         console.log(
             'Values sorted:',
-            newValue.map(i => i.value)
+            newValue.map(i => i.id)
         );
-    };
-
-    const handleClickOpen = () => {
-        setOpen(true);
     };
 
     const handleClose = () => {
@@ -82,16 +108,102 @@ function AddEditProcess() {
     };
 
     const handleClickDone = () => {
-        console.log("Clicou.");
         setLoading(true);
-        setTimeout(() => {
-            handleClickOpen();
-            setLoading(false);
-        }, 3000);
+
+        // Rever createdby e status
+        const newProcess = {
+            id: currentProcess.id,
+            name: fieldName,
+            description: fieldDescription,
+            expectedReportDate: convertJavascriptDateToBackendDate(fieldDeadline),
+            users: fieldResponsibles.map(x => { return { id: x.value } }),
+            createdBy: { id: 2 }
+        };
+
+        if (currentProcess.id != null) {
+            newProcess.status = resolveStatusNameByStatusId(fieldStatus);
+            api.put("process", newProcess).then(response => {
+                setModalTitle("Pronto");
+                setModalText("Processo atualizado");
+                setModalButtons(["VOLTAR"]);
+                setOpen(true);
+                setLoading(false);
+            }).catch(error => {
+                setModalTitle("OPS...");
+                setModalText("Ocorreu um erro...");
+                setModalButtons(["OK"]);
+                setOpen(true);
+                setLoading(false);
+            });
+        } else {
+            api.post("process", newProcess).then(response => {
+                setModalTitle("Pronto");
+                setModalText("Processo criado");
+                setModalButtons(["VOLTAR"]);
+                setOpen(true);
+                setLoading(false);
+            }).catch(error => {
+                setModalTitle("OPS...");
+                setModalText("Ocorreu um erro...");
+                setModalButtons(["OK"]);
+                setOpen(true);
+                setLoading(false);
+            });
+        }
+    }
+
+    const handleChangeName = event => {
+        setFieldName(event.target.value);
+    }
+    const handleChangeDeadline = event => {
+        setFieldDeadline(event.target.value);
+    }
+    const handleChangeResponsibles = selectedOptions => {
+        setFieldResponsibles(selectedOptions);
+    }
+    const handleChangeDescription = event => {
+        setFieldDescription(event.target.value);
+    }
+    const handleChangeStatus = event => {
+        setFieldStatus(event.target.value);
     }
 
     const resolveDisabled = () => {
         return ((currentOperation && currentOperation.name == 'view') || loading);
+    }
+
+    const resolveButtonDoneDisabled = () => {
+        if (currentOperation && currentOperation.name == 'view')
+            return true;
+
+        return !(fieldName && fieldDeadline && fieldDescription && fieldResponsibles && fieldResponsibles.length > 0 && fieldStatus && fieldStatus != 0);
+    }
+
+    const convertBackenddateToJavascriptDate = (date) => {
+        const day = date.split(" ")[0].split("/")[0];
+        const month = date.split(" ")[0].split("/")[1];
+        const year = date.split(" ")[0].split("/")[2];
+        const hours = date.split(" ")[1].split(":")[0];
+        const mins = date.split(" ")[1].split(":")[1];
+        return `${year}-${month}-${day}T${hours}:${mins}`;
+    }
+
+    const resolveSelectStatus = () => {
+        if (currentOperation && currentOperation.name == "add")
+            return;
+        else return (
+            <div className="AddEditProcess-form-line-item">
+                <label for="status">Status</label>
+                <select name="status" disabled={resolveDisabled()} onChange={handleChangeStatus} value={fieldStatus}>
+                    <option value="1">Criado</option>
+                    <option value="2">Executando processo</option>
+                    <option value="3">Aguardando Parecer</option>
+                    <option value="4">Sucesso</option>
+                    <option value="5">Insucesso</option>
+                    <option value="6">Cancelado</option>
+                </select>
+            </div>
+        )
     }
 
     return (
@@ -107,15 +219,18 @@ function AddEditProcess() {
                     <div className="AddEditProcess-form">
                         <div className="AddEditProcess-form-line-item">
                             <label for="name">Nome</label>
-                            <input name="name" maxLength="100" disabled={resolveDisabled()}></input>
+                            <input name="name" maxLength="100" disabled={resolveDisabled()} onChange={handleChangeName} value={fieldName}></input>
                         </div>
+                        {
+                            resolveSelectStatus()
+                        }
                         <div className="AddEditProcess-form-line-item">
                             <label for="deadline">Deadline</label>
-                            <input id="deadline" type="datetime-local" disabled={resolveDisabled()} />
+                            <input id="deadline" type="datetime-local" disabled={resolveDisabled()} onChange={handleChangeDeadline} value={fieldDeadline} />
                         </div>
                         <div className="AddEditProcess-form-line-item">
                             <label for="role">Reponsáveis</label>
-                            <SortableSelect 
+                            <SortableSelect
                                 className="AddEditProcess-select-users"
                                 useDragHandle
                                 axis="xy"
@@ -123,9 +238,9 @@ function AddEditProcess() {
                                 distance={4}
                                 getHelperDimensions={({ node }) => node.getBoundingClientRect()}
                                 isMulti
-                                options={colourOptions}
-                                value={selected}
-                                onChange={onChange}
+                                options={userOperatorList}
+                                value={fieldResponsibles}
+                                onChange={handleChangeResponsibles}
                                 components={{
                                     MultiValue: SortableMultiValue,
                                     MultiValueLabel: SortableMultiValueLabel,
@@ -134,16 +249,27 @@ function AddEditProcess() {
 
                             />
                         </div>
+
+                        {
+                            currentProcess.reports ?
+                                currentProcess.reports.map(report => (
+                                    <div className="AddEditProcess-form-line-item">
+                                        <label><b>Report de {report.writer.name}</b></label>
+                                        <p>{report.description}</p>
+                                    </div>
+                                )) : null
+                        }
+
                         <div className="AddEditProcess-form-line-item">
                             <label for="description">Descrição</label>
-                            <textarea name="description" rows="4" cols="50" maxLength="400" disabled={resolveDisabled()}></textarea>
+                            <textarea name="description" rows="4" cols="50" maxLength="400" disabled={resolveDisabled()} onChange={handleChangeDescription} value={fieldDescription}></textarea>
                         </div>
                         <div className="AddEditProcess-form-line-item">
                             {
                                 loading ?
                                     <CircularProgress style={{ alignSelf: 'center' }} />
                                     :
-                                    <Button variant="contained" color="primary" onClick={handleClickDone}>Concluir</Button>
+                                    <Button variant="contained" color="primary" disabled={resolveButtonDoneDisabled()} onClick={handleClickDone}>Concluir</Button>
                             }
                         </div>
                     </div>
@@ -156,16 +282,26 @@ function AddEditProcess() {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"OPS..."}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{modalTitle}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Não foi possível adicionar o usuário. Verifique os campos e tente novamente.
+                        {modalText}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        OK
-                    </Button>
+                    {
+                        modalButtons.map(button => (
+                            <Button onClick={() => {
+                                if (button == "VOLTAR")
+                                    history.goBack();
+
+                                handleClose();
+                            }} color="primary">
+                                {button}
+                            </Button>
+                        )
+                        )
+                    }
                 </DialogActions>
             </Dialog>
         </>

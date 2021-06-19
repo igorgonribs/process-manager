@@ -16,6 +16,7 @@ const Routes = () => {
             <Route component={AddEditUser} path="/add-edit-user/:operation/:id" exact />
             <Route component={AddEditUser} path="/add-edit-user/:operation" exact />
             <Route component={AddEditProcess} path="/add-edit-process/:operation" exact />
+            <Route component={AddEditProcess} path="/add-edit-process/:operation/:id" exact />
             <Route component={Processes} path="/processes" exact />
             <Route component={Reports} path="/process/report" exact />
         </BrowserRouter>

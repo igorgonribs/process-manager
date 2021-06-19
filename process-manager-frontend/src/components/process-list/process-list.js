@@ -67,12 +67,12 @@ export default function ProcessList() {
                                 </div>
 
                                 <ListItemSecondaryAction>
-                                    <Link to="/add-edit-process/edit"  >
+                                    <Link to={`/add-edit-process/edit/${process.id}`}>
                                         <Fab color="primary" aria-label="edit" size="medium" >
                                             <FiEdit />
                                         </Fab>
                                     </Link>
-                                    <Link to="/add-edit-process/view">
+                                    <Link to={`/add-edit-process/view/${process.id}`}>
                                         <Fab color="secondary" aria-label="view" size="medium" >
                                             <FiEye />
                                         </Fab>

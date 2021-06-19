@@ -20,7 +20,7 @@ public enum ProcessStatus {
 
 	public static Integer getIdByDescription(String description) throws Exception {
 		for (ProcessStatus status : ProcessStatus.values()) {
-			if (description.equals(status.description))
+			if (description.equalsIgnoreCase(status.description))
 				return status.id;
 		}
 		throw new InvalidStatusException("Invalid Process Status");
