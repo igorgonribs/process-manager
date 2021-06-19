@@ -12,6 +12,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { operations } from './../../utils/operations';
+import { convertJavascriptDateToBackendDate, convertBackenddateToJavascriptDate } from '../../utils/date';
 import { resolveStatusIdByStatusName, resolveStatusNameByStatusId } from '../../utils/process-status';
 import api from '../../services/api';
 import './AddEditProcess.css';
@@ -20,15 +21,6 @@ function arrayMove(array, from, to) {
     array = array.slice();
     array.splice(to < 0 ? array.length + to : to, 0, array.splice(from, 1)[0]);
     return array;
-}
-
-const convertJavascriptDateToBackendDate = (date) => {
-    const day = date.split("T")[0].split("-")[2];
-    const month = date.split("T")[0].split("-")[1];
-    const year = date.split("T")[0].split("-")[0];
-    const hours = date.split("T")[1].split(":")[0];
-    const mins = date.split("T")[1].split(":")[1];
-    return `${day}/${month}/${year} ${hours}:${mins}`;
 }
 
 const SortableMultiValue = SortableElement(props => {
@@ -177,15 +169,6 @@ function AddEditProcess() {
             return true;
 
         return !(fieldName && fieldDeadline && fieldDescription && fieldResponsibles && fieldResponsibles.length > 0 && fieldStatus && fieldStatus != 0);
-    }
-
-    const convertBackenddateToJavascriptDate = (date) => {
-        const day = date.split(" ")[0].split("/")[0];
-        const month = date.split(" ")[0].split("/")[1];
-        const year = date.split(" ")[0].split("/")[2];
-        const hours = date.split(" ")[1].split(":")[0];
-        const mins = date.split(" ")[1].split(":")[1];
-        return `${year}-${month}-${day}T${hours}:${mins}`;
     }
 
     const resolveSelectStatus = () => {

@@ -77,7 +77,7 @@ export default function ProcessList() {
                                             <FiEye />
                                         </Fab>
                                     </Link>
-                                    <Link to="/process/report">
+                                    <Link to={`/process/report/${process.id}`}>
                                         <Fab color="secondary" aria-label="report" size="medium" >
                                             <FiFile />
                                         </Fab>

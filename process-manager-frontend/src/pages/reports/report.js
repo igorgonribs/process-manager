@@ -9,8 +9,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useHistory, useParams } from 'react-router-dom';
 
-import { resolveStatusColorByStatusId } from '../../utils/process-status';
+import api from '../../services/api';
+import { resolveStatusColorByStatusId, resolveStatusIdByStatusName } from '../../utils/process-status';
+import { convertJavascriptDateToBackendDate, convertBackenddateToJavascriptDate } from '../../utils/date';
 import './Report.css';
 
 const mockProcess = {
@@ -31,15 +34,34 @@ const mockProcess = {
 
 function Report() {
 
+    let { id } = useParams();
+    let history = useHistory();
+
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [currentProcess, setCurrentProcess] = React.useState(null);
 
-    React.useEffect(() => {
-        setTimeout(() => {
-            setCurrentProcess(mockProcess);
-        }, 3000);
+    // Campos
+    const [fieldName, setFieldName] = React.useState("");
+    const [fieldDeadline, setFieldDeadline] = React.useState(new Date());
+    const [fieldResponsibles, setFieldResponsibles] = React.useState([]);
+    const [fieldDescription, setFieldDescription] = React.useState("");
+    const [fieldStatus, setFieldStatus] = React.useState(1);
 
+    // Modal
+    const [modalTitle, setModalTitle] = React.useState("");
+    const [modalText, setModalText] = React.useState("");
+    const [modalButtons, setModalButtons] = React.useState([]);
+
+    React.useEffect(() => {
+        if (id)
+            api.get(`process/${id}`).then(response => {
+                setCurrentProcess(response.data);
+                setFieldName(response.data.name);
+                setFieldDeadline(convertBackenddateToJavascriptDate(response.data.expectedReportDate));
+                setFieldStatus(resolveStatusIdByStatusName(response.data.status));
+                setLoading(false);
+            })
     }, []);
 
     const handleClickOpen = () => {
@@ -51,16 +73,39 @@ function Report() {
     };
 
     const handleClickDone = () => {
-        console.log("Clicou.");
         setLoading(true);
-        setTimeout(() => {
-            handleClickOpen();
+
+        // rever usuario logado (writer.id)
+        //let newProcess = currentProcess;
+        let newReport = { description: fieldDescription, writerId: 3, processId: currentProcess.id }
+        //newProcess.reports.push(newReport);
+        api.post("report", newReport).then(response => {
+            setModalTitle("Pronto");
+            setModalText("Report enviado");
+            setModalButtons(["VOLTAR"]);
+            setOpen(true);
             setLoading(false);
-        }, 3000);
+        }).catch(error => {
+            setModalTitle("OPS...");
+            setModalText("Ocorreu um erro...");
+            setModalButtons(["OK"]);
+            setOpen(true);
+            setLoading(false);
+        });
     }
 
     const resolveDisabled = () => {
         return loading;
+    }
+
+    const handleChangeDescription = event => {
+        console.log("handle description")
+
+        setFieldDescription(event.target.value);
+    }
+
+    const resolveButtonDoneDisabled = () => {
+        return !(fieldDescription);
     }
 
     return (
@@ -91,18 +136,18 @@ function Report() {
                                     </div>
                                     <div className="Report-form-line">
                                         <label for="description"><b>Descrição:</b></label>
-                                        <p style={{marginTop:0}}>{currentProcess.description}</p>
+                                        <p style={{ marginTop: 0 }}>{currentProcess.description}</p>
                                     </div>
                                     <div className="Report-form-line">
                                         <label for="report"><b>Parecer de Usuario logado:</b></label>
-                                        <textarea name="report" maxLength="255" disabled={resolveDisabled()}></textarea>
+                                        <textarea name="report" maxLength="255" disabled={resolveDisabled()} onChange={handleChangeDescription} value={fieldDescription}></textarea>
                                     </div>
                                     <div className="Report-form-line">
                                         {
                                             loading ?
                                                 <CircularProgress style={{ alignSelf: 'center' }} />
                                                 :
-                                                <Button variant="contained" color="primary" onClick={handleClickDone}>Enviar</Button>
+                                                <Button variant="contained" color="primary" onClick={handleClickDone} disabled={resolveButtonDoneDisabled()}>Enviar</Button>
                                         }
                                     </div>
                                 </>
@@ -118,16 +163,26 @@ function Report() {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Pronto!"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{modalTitle}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Parecer enviado!
+                        {modalText}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        OK
-                    </Button>
+                    {
+                        modalButtons.map(button => (
+                            <Button onClick={() => {
+                                if (button == "VOLTAR")
+                                    history.goBack();
+
+                                handleClose();
+                            }} color="primary">
+                                {button}
+                            </Button>
+                        )
+                        )
+                    }
                 </DialogActions>
             </Dialog>
         </>

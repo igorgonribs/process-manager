@@ -18,7 +18,7 @@ const Routes = () => {
             <Route component={AddEditProcess} path="/add-edit-process/:operation" exact />
             <Route component={AddEditProcess} path="/add-edit-process/:operation/:id" exact />
             <Route component={Processes} path="/processes" exact />
-            <Route component={Reports} path="/process/report" exact />
+            <Route component={Reports} path="/process/report/:id" exact />
         </BrowserRouter>
     );
 }
