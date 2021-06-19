@@ -32,7 +32,6 @@ export default function UserList() {
         api.get('user').then(response => {
             setUsersList(response.data)
         }).catch(error => {
-            console.log("Error");
             setUsersList([]);
         });
     }, []);

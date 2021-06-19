@@ -7,20 +7,42 @@ import Fab from '@material-ui/core/Fab';
 import { FiEdit, FiEye, FiSettings, FiPaperclip, FiFile } from 'react-icons/fi';
 import Divider from '@material-ui/core/Divider';
 import { Link } from 'react-router-dom';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
+import api from '../../services/api';
+import { resolveStatusColorByStatusId } from '../../utils/process-status';
 import './ProcessList.css';
 
 export default function ProcessList() {
 
-    return (
-        <>
-            <List >
-                {[0, 1, 2, 3].map((value) => {
-                    const labelId = `checkbox-list-label-${value}`;
+    const [processesList, setProcessesList] = React.useState(null);
+
+    React.useEffect(() => {
+
+        api.get('process').then(response => {
+            setProcessesList(response.data)
+        }).catch(error => {
+            setProcessesList([]);
+        });
+    }, []);
+
+    const resolveNumberOfReportsPending = process => {
+        return `${process.reports.length} de ${process.users.length}`
+    }
+
+    const resolveWhatDisplay = () => {
+        if (!processesList)
+            return (<CircularProgress style={{ alignSelf: 'center', margin: 64 }} />);
+        else if (processesList.length == 0)
+            return (<p>Não há processos.</p>);
+        else
+            return (
+                <List >
+                {processesList.map((process) => {
 
                     return (
                         <>
-                            <ListItem key={value} role={undefined} dense button style={{ paddingLeft: 40 }}>
+                            <ListItem key={process.id} role={undefined} dense button style={{ paddingLeft: 40 }}>
 
                                 <div className="Process-list-item-content">
                                     <div className="Process-list-item-header">
@@ -31,15 +53,15 @@ export default function ProcessList() {
 
                                     <div className="ProcessList-list-item-body">
                                         <div className="ProcessList-First-Line-process-list-item">
-                                            <p className="ProcessList-item-text" >Processo 1</p>
-                                            <p className="ProcessList-item-status">CANCELADO</p>
+                                            <p className="ProcessList-item-text" >{process.name}</p>
+                                            <p className="ProcessList-item-status" style={{ backgroundColor: resolveStatusColorByStatusId(process.status) }}>{process.status.toUpperCase()}</p>
                                         </div>
                                         <div className="ProcessList-Second-Line-process-list-item">
                                             <div className="ProcessList-reports-done-div">
                                                 <FiPaperclip className="ProcessList-reports-done-icon"  />
-                                                <p className="ProcessList-reports-done-text">1 de 2</p>
+                                                <p className="ProcessList-reports-done-text">{resolveNumberOfReportsPending(process)}</p>
                                             </div>
-                                            <p className="ProcessList-item-subtext">Deadline: 18/06/2021 às 11:00</p>
+                                            <p className="ProcessList-item-subtext">Deadline: {process.expectedReportDate.split(" ")[0]} às {process.expectedReportDate.split(" ")[1]}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -67,6 +89,8 @@ export default function ProcessList() {
                     );
                 })}
             </List>
-        </>
-    );
+            );
+    }
+
+    return resolveWhatDisplay();
 }
