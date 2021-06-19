@@ -13,55 +13,106 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
+import api from '../../services/api';
 import './UserList.css';
 
 export default function UserList() {
 
     const [open, setOpen] = React.useState(false);
+    const [usersList, setUsersList] = React.useState(null);
+    const [modalTitle, setModalTitle] = React.useState("Deletar Usuário?");
+    const [modalText, setModalText] = React.useState("Tem certeza de que deseja deletar este usuário?");
+    const [modalButtons, setModalButtons] = React.useState(["SIM", "NÃO"]);
+    const [userToDelete, setUserToDelete] = React.useState({});
 
-    const handleClickOpen = () => {
-      setOpen(true);
+    React.useEffect(() => {
+
+        api.get('user').then(response => {
+            setUsersList(response.data)
+        }).catch(error => {
+            console.log("Error");
+            setUsersList([]);
+        });
+    }, []);
+
+    const handleClickOpenDelete = () => {
+        setModalTitle("Deletar Usuário?");
+        setModalText("Tem certeza de que deseja deletar este usuário?");
+        setModalButtons(["SIM", "NÃO"]);
+        setOpen(true);
     };
-  
+
     const handleClose = () => {
-      setOpen(false);
+        setOpen(false);
     };
+
+    const deleteUser = () => {
+        api.delete(`user/${userToDelete.id}`).then(response => {
+            const newUserList = usersList.filter(x => x.id != userToDelete.id);
+            setUsersList(newUserList);
+            setUserToDelete({});
+        }).catch(error => {
+            console.log("Error", error);
+            setModalTitle("OPS...");
+            setModalText(error.response.data);
+            setModalButtons(["OK"]);
+            setOpen(true);
+        });
+    }
+
+    const resolveWhatDisplay = () => {
+        if (!usersList)
+            return (<CircularProgress style={{ alignSelf: 'center', margin: 64 }} />);
+        else if (usersList.length == 0)
+            return (<p>Não há usuários.</p>);
+        else
+            return (
+                <List >
+                    {usersList.map((user) => {
+
+                        return (
+                            <>
+                                <ListItem key={user.id} role={undefined} dense button style={{ paddingLeft: 40 }}>
+                                    <ListItemIcon>
+                                        <FiUserCheck />
+                                    </ListItemIcon>
+
+                                    <div>
+                                        <p className="UserList-item-text" >{user.name}</p>
+                                        <p className="UserList-item-subtext">{user.profile.description}</p>
+                                        <p className="UserList-item-subtext">{user.cpf}</p>
+                                    </div>
+
+                                    <ListItemSecondaryAction>
+                                        <Link to={`/add-edit-user/edit/${user.id}`}>
+                                            <Fab color="secondary" aria-label="edit" size="medium" >
+                                                <FiEdit />
+                                            </Fab>
+                                        </Link>
+                                        <Fab aria-label="delete" size="medium" onClick={() => {
+                                            setUserToDelete(user);
+                                            handleClickOpenDelete();
+                                        }
+                                        }>
+                                            <FiTrash />
+                                        </Fab>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                                <Divider />
+                            </>
+                        );
+                    })}
+                </List>
+            );
+    }
+
     return (
         <>
-            <List >
-                {[0, 1, 2, 3].map((value) => {
-                    const labelId = `checkbox-list-label-${value}`;
-
-                    return (
-                        <>
-                            <ListItem key={value} role={undefined} dense button style={{ paddingLeft: 40 }}>
-                                <ListItemIcon>
-                                    <FiUserCheck />
-                                </ListItemIcon>
-
-                                <div>
-                                    <p className="UserList-item-text" >Igor Gonçalves Ribeiro Silva</p>
-                                    <p className="UserList-item-subtext">Administrador</p>
-                                    <p className="UserList-item-subtext">11094463655</p>
-                                </div>
-
-                                <ListItemSecondaryAction>
-                                    <Link to="./add-edit-user">
-                                        <Fab color="secondary" aria-label="edit" size="medium" >
-                                            <FiEdit />
-                                        </Fab>
-                                    </Link>
-                                    <Fab aria-label="delete" size="medium" onClick={handleClickOpen}>
-                                        <FiTrash />
-                                    </Fab>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <Divider />
-                        </>
-                    );
-                })}
-            </List>
+            {
+                resolveWhatDisplay()
+            }
 
             <Dialog
                 open={open}
@@ -69,19 +120,26 @@ export default function UserList() {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Deletar Usuário?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{modalTitle}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Tem certeza de que deseja deletar este usuário?
+                        {modalText}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        NÃO
-                    </Button>
-                    <Button onClick={handleClose} color="primary" autoFocus>
-                        SIM
-                    </Button>
+                    {
+                        modalButtons.map(button => (
+                            <Button onClick={() => {
+                                if (button == "SIM")
+                                    deleteUser();
+
+                                handleClose();
+                            }} color="primary">
+                                {button}
+                            </Button>
+                        )
+                        )
+                    }
                 </DialogActions>
             </Dialog>
         </>

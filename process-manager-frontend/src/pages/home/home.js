@@ -17,7 +17,7 @@ function Home() {
                     <Link to="./users" className="Home-card-item Home-card-user">
                         Usuários
                     </Link>
-                    <Link to="./reports" className="Home-card-item Home-card-report">
+                    <Link to="./process/report" className="Home-card-item Home-card-report">
                         Parecer
                     </Link>
 

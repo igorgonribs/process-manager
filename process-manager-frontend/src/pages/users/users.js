@@ -1,4 +1,7 @@
-import { FiUserCheck } from 'react-icons/fi';
+import { FiUserCheck, FiPlusCircle } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+
 import UserList from './../../components/user-list/user-list';
 import './Users.css';
 
@@ -12,6 +15,14 @@ function Users() {
                 </div>
             </div>
             <div className="Users-body">
+                <Link to="/add-edit-user/add">
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<FiPlusCircle />}
+                        style={{ width: 140, marginBottom: 12 }}
+                    >Adicionar</Button>
+                </Link>
                 <div className="Users-list">
                     <UserList />
                 </div>

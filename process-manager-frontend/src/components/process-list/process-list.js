@@ -4,7 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Fab from '@material-ui/core/Fab';
-import { FiEdit, FiEye, FiSettings, FiPaperclip } from 'react-icons/fi';
+import { FiEdit, FiEye, FiSettings, FiPaperclip, FiFile } from 'react-icons/fi';
 import Divider from '@material-ui/core/Divider';
 import { Link } from 'react-router-dom';
 
@@ -45,14 +45,19 @@ export default function ProcessList() {
                                 </div>
 
                                 <ListItemSecondaryAction>
-                                    <Link to="./add-edit-user">
+                                    <Link to="/add-edit-process/edit"  >
                                         <Fab color="primary" aria-label="edit" size="medium" >
                                             <FiEdit />
                                         </Fab>
                                     </Link>
-                                    <Link to="./add-edit-user">
-                                        <Fab color="secondary" aria-label="edit" size="medium" >
+                                    <Link to="/add-edit-process/view">
+                                        <Fab color="secondary" aria-label="view" size="medium" >
                                             <FiEye />
+                                        </Fab>
+                                    </Link>
+                                    <Link to="/process/report">
+                                        <Fab color="secondary" aria-label="report" size="medium" >
+                                            <FiFile />
                                         </Fab>
                                     </Link>
                                 </ListItemSecondaryAction>
