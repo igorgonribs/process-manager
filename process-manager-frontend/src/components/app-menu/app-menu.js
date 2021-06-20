@@ -5,10 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { FiMenu, FiLogOut, FiPlus, FiArrowLeft } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { FiMenu, FiPlus, FiArrowLeft } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 
+import { getUserLogged } from '../../utils/loginLogout';
+import { permissions } from '../../utils/permissions';
 import "./AppMenu.css";
 
 function AppMenu({ pageName, addButtonLink, goBack }) {
@@ -42,11 +43,28 @@ function AppMenu({ pageName, addButtonLink, goBack }) {
             return (
                 <div className="App-appbar-add-button">
                     <IconButton edge="start" color="inherit" aria-label="add" onClick={() => history.push(addButtonLink)}>
-                        {/* <p style={{color:'white', fontSize:18}}>ADD</p> */}
                         <FiPlus />
                     </IconButton>
                 </div>
             );
+
+        return;
+    }
+
+    const resolveProcessPage = () => {
+        const user = getUserLogged();
+        if (user.profile.id != permissions.adm)
+
+            return (<MenuItem onClick={() => { handleClose(); history.push("/processes"); }}>Processos</MenuItem>);
+    }
+
+    const resolveUserPage = () => {
+        const user = getUserLogged();
+        if (user.profile.id == permissions.adm)
+            return (<>
+                <MenuItem onClick={() => { handleClose(); history.push("/users"); }}>Usuários</MenuItem>
+                <MenuItem onClick={() => { handleClose(); history.push("/processes"); }}>Processos</MenuItem>
+            </>);
 
         return;
     }
@@ -66,7 +84,7 @@ function AppMenu({ pageName, addButtonLink, goBack }) {
                         </div>
                         <div className="App-appbar-title">
                             <Typography variant="h6" >
-                                {pageName}
+                                {/* {pageName} */ "Olá, " + getUserLogged().name}
                             </Typography>
                         </div>
                         {resolveAddButton()}
@@ -82,8 +100,8 @@ function AppMenu({ pageName, addButtonLink, goBack }) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={() => { handleClose(); history.push("/users"); }}>Usuários</MenuItem>
-                <MenuItem onClick={() => { handleClose(); history.push("/processes"); }}>Processos</MenuItem>
+                {resolveProcessPage()}
+                {resolveUserPage()}
                 <MenuItem onClick={() => { handleClose(); history.push("/"); }}>Logout</MenuItem>
             </Menu>
         </div>

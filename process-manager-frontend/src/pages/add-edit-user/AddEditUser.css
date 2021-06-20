@@ -38,10 +38,8 @@
 }
 
 .AddEditUser-form {
-  
   display: flex;
   flex-direction: column;
-  width: 60%;
   background-color: var(--white);
   color: var(--white);
   border-radius: 8px;

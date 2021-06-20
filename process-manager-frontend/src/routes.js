@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, BrowserRouter } from 'react-router-dom';
 
-import Home from './pages/home/home';
+import Login from './pages/login/login';
 import Users from './pages/users/users';
 import AddEditUser from './pages/add-edit-user/add-edit-user';
 import AddEditProcess from './pages/add-edit-process/add-edit-process';
@@ -11,7 +11,7 @@ import Reports from './pages/reports/report';
 const Routes = () => {
     return (
         <BrowserRouter>
-            <Route component={Home} path="/" exact />
+            <Route component={Login} path="/" exact />
             <Route component={Users} path="/users" exact />
             <Route component={AddEditUser} path="/add-edit-user/:operation/:id" exact />
             <Route component={AddEditUser} path="/add-edit-user/:operation" exact />

@@ -1,12 +1,11 @@
-import { FiUserCheck, FiPlusCircle } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import { FiUserCheck } from 'react-icons/fi';
 
 import UserList from './../../components/user-list/user-list';
 import AppMenu from '../../components/app-menu/app-menu';
 import './Users.css';
 
 function Users() {
+
     return (
         <>
         <AppMenu pageName="Usuários" addButtonLink="/add-edit-user/add"/>

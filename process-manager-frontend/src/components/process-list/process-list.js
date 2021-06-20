@@ -10,8 +10,10 @@ import { Link } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import api from '../../services/api';
+import { getUserLogged } from '../../utils/loginLogout';
 import { resolveStatusColorByStatusId } from '../../utils/process-status';
 import './ProcessList.css';
+import { permissions } from '../../utils/permissions';
 
 export default function ProcessList() {
 
@@ -30,6 +32,46 @@ export default function ProcessList() {
         return `${process.reports.length} de ${process.users.length}`
     }
 
+    const resolveButtonsToDisplay = (process) => {
+        if (getUserLogged().profile.id == permissions.operator)
+            return (
+                <>
+                    <Link to={`/process/report/${process.id}`}>
+                        <Fab color="secondary" aria-label="report" size="medium" >
+                            <FiFile />
+                        </Fab>
+                    </Link>
+                </>
+            );
+        else if (getUserLogged().profile.id == permissions.triage)
+            return (
+                <>
+                    <Link to={`/add-edit-process/edit/${process.id}`}>
+                        <Fab color="primary" aria-label="edit" size="medium" >
+                            <FiEdit />
+                        </Fab>
+                    </Link>
+                    <Link to={`/add-edit-process/view/${process.id}`}>
+                        <Fab color="secondary" aria-label="view" size="medium" >
+                            <FiEye />
+                        </Fab>
+                    </Link>
+                </>
+            );
+        else
+            return (
+                <>
+                    <Link to={`/add-edit-process/view/${process.id}`}>
+                        <Fab color="secondary" aria-label="view" size="medium" >
+                            <FiEye />
+                        </Fab>
+                    </Link>
+                </>
+            );
+
+
+    }
+
     const resolveWhatDisplay = () => {
         if (!processesList)
             return (<CircularProgress style={{ alignSelf: 'center', margin: 64 }} />);
@@ -38,57 +80,58 @@ export default function ProcessList() {
         else
             return (
                 <List >
-                {processesList.map((process) => {
+                    {processesList.map((process) => {
 
-                    return (
-                        <>
-                            <ListItem key={process.id} role={undefined} dense button style={{ paddingLeft: 40 }}>
+                        return (
+                            <>
+                                <ListItem key={process.id} role={undefined} dense button style={{ paddingLeft: 40 }}>
 
-                                <div className="Process-list-item-content">
-                                    <div className="Process-list-item-header">
-                                        <ListItemIcon>
-                                            <FiSettings />
-                                        </ListItemIcon>
-                                    </div>
-
-                                    <div className="ProcessList-list-item-body">
-                                        <div className="ProcessList-First-Line-process-list-item">
-                                            <p className="ProcessList-item-text" >{process.name}</p>
-                                            <p className="ProcessList-item-status" style={{ backgroundColor: resolveStatusColorByStatusId(process.status) }}>{process.status.toUpperCase()}</p>
+                                    <div className="Process-list-item-content">
+                                        <div className="Process-list-item-header">
+                                            <ListItemIcon>
+                                                <FiSettings />
+                                            </ListItemIcon>
                                         </div>
-                                        <div className="ProcessList-Second-Line-process-list-item">
-                                            <div className="ProcessList-reports-done-div">
-                                                <FiPaperclip className="ProcessList-reports-done-icon"  />
-                                                <p className="ProcessList-reports-done-text">{resolveNumberOfReportsPending(process)}</p>
+
+                                        <div className="ProcessList-list-item-body">
+                                            <div className="ProcessList-First-Line-process-list-item">
+                                                <p className="ProcessList-item-text" >{process.name}</p>
+                                                <p className="ProcessList-item-status" style={{ backgroundColor: resolveStatusColorByStatusId(process.status) }}>{process.status.toUpperCase()}</p>
                                             </div>
-                                            <p className="ProcessList-item-subtext">Deadline: {process.expectedReportDate.split(" ")[0]} às {process.expectedReportDate.split(" ")[1]}</p>
+                                            <div className="ProcessList-Second-Line-process-list-item">
+                                                <div className="ProcessList-reports-done-div">
+                                                    <FiPaperclip className="ProcessList-reports-done-icon" />
+                                                    <p className="ProcessList-reports-done-text">{resolveNumberOfReportsPending(process)}</p>
+                                                </div>
+                                                <p className="ProcessList-item-subtext">Deadline: {process.expectedReportDate.split(" ")[0]} às {process.expectedReportDate.split(" ")[1]}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <ListItemSecondaryAction>
-                                    <Link to={`/add-edit-process/edit/${process.id}`}>
-                                        <Fab color="primary" aria-label="edit" size="medium" >
-                                            <FiEdit />
-                                        </Fab>
-                                    </Link>
-                                    <Link to={`/add-edit-process/view/${process.id}`}>
-                                        <Fab color="secondary" aria-label="view" size="medium" >
-                                            <FiEye />
-                                        </Fab>
-                                    </Link>
-                                    <Link to={`/process/report/${process.id}`}>
-                                        <Fab color="secondary" aria-label="report" size="medium" >
-                                            <FiFile />
-                                        </Fab>
-                                    </Link>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <Divider />
-                        </>
-                    );
-                })}
-            </List>
+                                    <ListItemSecondaryAction>
+                                        {resolveButtonsToDisplay(process)}
+                                        {/* <Link to={`/add-edit-process/edit/${process.id}`}>
+                                            <Fab color="primary" aria-label="edit" size="medium" >
+                                                <FiEdit />
+                                            </Fab>
+                                        </Link>
+                                        <Link to={`/add-edit-process/view/${process.id}`}>
+                                            <Fab color="secondary" aria-label="view" size="medium" >
+                                                <FiEye />
+                                            </Fab>
+                                        </Link>
+                                        <Link to={`/process/report/${process.id}`}>
+                                            <Fab color="secondary" aria-label="report" size="medium" >
+                                                <FiFile />
+                                            </Fab>
+                                        </Link> */}
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                                <Divider />
+                            </>
+                        );
+                    })}
+                </List>
             );
     }
 
