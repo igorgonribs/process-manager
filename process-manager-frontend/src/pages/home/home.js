@@ -1,9 +1,13 @@
 import { FiCodesandbox, } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+
+import AppMenu from '../../components/app-menu/app-menu';
 import './Home.css';
 
 function Home() {
     return (
+        <>
+        <AppMenu pageName="Home"/>
         <div className="Home">
             <header className="Home-header">
                 <div className="Home-Header-title">
@@ -24,6 +28,7 @@ function Home() {
                 </div>
             </header>
         </div>
+        </>
     );
 }
 

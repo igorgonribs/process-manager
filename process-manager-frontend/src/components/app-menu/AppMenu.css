@@ -1,0 +1,37 @@
+.App-appbar-root {
+    flex-grow: 1;
+  }
+  .App-appbar {
+    background-color: black;
+  }
+  
+  .App-appbar-organizer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .App-appbar-menuButton-list {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+  }
+
+  .App-appbar-menuButton {
+    display: flex;
+    flex: 1;
+  }
+
+  .App-appbar-title {
+    display: flex;
+    flex: 9;
+    text-align: center;
+  }
+  
+  .App-appbar-add-button {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+  }

@@ -11,6 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useHistory, useParams } from 'react-router-dom';
 
 
+import AppMenu from '../../components/app-menu/app-menu';
 import { operations } from './../../utils/operations';
 import api from '../../services/api';
 import './AddEditUser.css';
@@ -111,6 +112,7 @@ function AddEditUser() {
 
     return (
         <>
+        <AppMenu pageName="Usuários" goBack={true}/>
             <div className="AddEditUser">
                 <div className="AddEditUser-header">
                     <div className="AddEditUser-Header-title">

@@ -1,7 +1,5 @@
 import React from 'react';
 import { FiSettings } from 'react-icons/fi';
-import Select, { components } from 'react-select';
-import { SortableContainer, SortableElement, sortableHandle } from 'react-sortable-hoc';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,8 +10,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useHistory, useParams } from 'react-router-dom';
 
 import api from '../../services/api';
+import AppMenu from '../../components/app-menu/app-menu';
 import { resolveStatusColorByStatusId, resolveStatusIdByStatusName } from '../../utils/process-status';
-import { convertJavascriptDateToBackendDate, convertBackenddateToJavascriptDate } from '../../utils/date';
+import { convertBackenddateToJavascriptDate } from '../../utils/date';
 import './Report.css';
 
 const mockProcess = {
@@ -110,6 +109,7 @@ function Report() {
 
     return (
         <>
+        <AppMenu pageName="Parecer" goBack={true}/>
             <div className="Report">
                 <div className="Report-header">
                     <div className="Report-Header-title">

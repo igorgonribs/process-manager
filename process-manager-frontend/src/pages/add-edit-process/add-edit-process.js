@@ -14,6 +14,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { operations } from './../../utils/operations';
 import { convertJavascriptDateToBackendDate, convertBackenddateToJavascriptDate } from '../../utils/date';
 import { resolveStatusIdByStatusName, resolveStatusNameByStatusId } from '../../utils/process-status';
+import AppMenu from '../../components/app-menu/app-menu';
 import api from '../../services/api';
 import './AddEditProcess.css';
 
@@ -191,6 +192,7 @@ function AddEditProcess() {
 
     return (
         <>
+            <AppMenu pageName="Processos" goBack={true}/>
             <div className="AddEditProcess">
                 <div className="AddEditProcess-header">
                     <div className="AddEditProcess-Header-title">
