@@ -33,7 +33,7 @@ public class ReportController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> addProcess(@RequestBody ReportDto dto) throws Exception {
+	public ResponseEntity<?> addReport(@RequestBody ReportDto dto) throws Exception {
 		service.add(dto);
 		return ResponseEntity.noContent().build();
 	}
