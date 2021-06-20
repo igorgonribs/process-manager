@@ -1,6 +1,7 @@
 package com.igor.challenge.processmanagerbackend.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +41,24 @@ public class UserServiceImpl implements UserService {
 		try {
 			repository.delete(userToDelete);
 		} catch (DataIntegrityViolationException ex) {
-			throw new DataIntegrityException("Não foi possível remover o usuário pois este usuário tem processos relacionados a ele.");
-		}	
+			throw new DataIntegrityException(
+					"Não foi possível remover o usuário pois este usuário tem processos relacionados a ele.");
+		}
 	}
 
 	@Override
 	public Optional<User> findById(Integer id) {
 		return repository.findById(id);
+	}
+
+	@Override
+	public User findByCpf(String cpf) {
+		List<User> list = repository.findByCpf(cpf);
+
+		if (list.size() == 0)
+			throw new NoSuchElementException("Usuário inexistente");
+
+		return list.get(0);
 	}
 
 }
