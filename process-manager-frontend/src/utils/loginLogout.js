@@ -10,7 +10,6 @@ export const removeUserSession = () => {
 
 export const redirectByProfile = () => {
     const user = JSON.parse(localStorage.getItem(userLoggedSessionProp));
-    console.log(user)
     if(user.profile.id == 1)
         return "/users";
     else 

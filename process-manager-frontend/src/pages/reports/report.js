@@ -13,6 +13,7 @@ import api from '../../services/api';
 import AppMenu from '../../components/app-menu/app-menu';
 import { resolveStatusColorByStatusId, resolveStatusIdByStatusName } from '../../utils/process-status';
 import { convertBackenddateToJavascriptDate } from '../../utils/date';
+import { getUserLogged } from '../../utils/loginLogout';
 import './Report.css';
 
 const mockProcess = {
@@ -74,10 +75,7 @@ function Report() {
     const handleClickDone = () => {
         setLoading(true);
 
-        // rever usuario logado (writer.id)
-        //let newProcess = currentProcess;
-        let newReport = { description: fieldDescription, writerId: 3, processId: currentProcess.id }
-        //newProcess.reports.push(newReport);
+        let newReport = { description: fieldDescription, writerId: getUserLogged().id, processId: currentProcess.id }
         api.post("report", newReport).then(response => {
             setModalTitle("Pronto");
             setModalText("Report enviado");
@@ -98,8 +96,6 @@ function Report() {
     }
 
     const handleChangeDescription = event => {
-        console.log("handle description")
-
         setFieldDescription(event.target.value);
     }
 
@@ -139,7 +135,7 @@ function Report() {
                                         <p style={{ marginTop: 0 }}>{currentProcess.description}</p>
                                     </div>
                                     <div className="Report-form-line">
-                                        <label for="report"><b>Parecer de Usuario logado:</b></label>
+                                        <label for="report"><b>Parecer de {getUserLogged().name}:</b></label>
                                         <textarea name="report" maxLength="255" disabled={resolveDisabled()} onChange={handleChangeDescription} value={fieldDescription}></textarea>
                                     </div>
                                     <div className="Report-form-line">

@@ -53,7 +53,6 @@ export default function UserList() {
             setUsersList(newUserList);
             setUserToDelete({});
         }).catch(error => {
-            console.log("Error", error);
             setModalTitle("OPS...");
             setModalText(error.response.data);
             setModalButtons(["OK"]);

@@ -38,7 +38,6 @@ function AppMenu({ pageName, addButtonLink, goBack }) {
     }
 
     const resolveAddButton = () => {
-        console.log("go back?");
         if (addButtonLink)
             return (
                 <div className="App-appbar-add-button">
