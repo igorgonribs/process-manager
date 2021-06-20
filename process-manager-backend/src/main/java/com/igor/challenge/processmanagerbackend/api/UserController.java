@@ -1,7 +1,6 @@
 package com.igor.challenge.processmanagerbackend.api;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +35,13 @@ public class UserController extends ParentController {
 		return ResponseEntity.ok().body(service.findById(id).get());
 	}
 
+	@GetMapping(value = "/operators")
+	public ResponseEntity<List<User>> findOperators() {
+		return ResponseEntity.ok().body(service.findOperators());
+	}
+
 	@PostMapping
-	public ResponseEntity<User> addUser(@RequestBody User user) throws URISyntaxException {
+	public ResponseEntity<User> addUser(@RequestBody User user) throws Exception {
 		user = service.add(user);
 		URI createdUserUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId())
 				.toUri();
@@ -45,7 +49,7 @@ public class UserController extends ParentController {
 	}
 
 	@PutMapping()
-	public ResponseEntity<User> updateUser(@RequestBody User user) throws URISyntaxException {
+	public ResponseEntity<User> updateUser(@RequestBody User user) throws Exception {
 		user = service.update(user);
 		return ResponseEntity.noContent().build();
 	}

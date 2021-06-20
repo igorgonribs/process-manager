@@ -56,7 +56,6 @@ function AddEditUser() {
         const newUser = { id: currentUser.id, name: fieldName, cpf: fieldCpf, profile: { id: fieldProfileId } };
         if (currentUser.id != null)
             api.put(`user`, newUser).then(response => {
-                console.log("Usuário atualizado");
                 setCurrentUser(newUser);
                 setLoading(false);
                 setModalTitle("Pronto");
@@ -73,7 +72,6 @@ function AddEditUser() {
                 });
         else
             api.post(`user`, newUser).then(response => {
-                console.log("Usuário adicionado");
                 setCurrentUser(newUser);
                 setLoading(false);
                 setModalTitle("Pronto");

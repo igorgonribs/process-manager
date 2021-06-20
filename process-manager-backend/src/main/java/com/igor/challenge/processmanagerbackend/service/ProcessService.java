@@ -12,5 +12,7 @@ public interface ProcessService {
 	ProcessDto add(ProcessDto dto) throws Exception;
 
 	ProcessDto update(ProcessDto dto) throws Exception;
+	
+	List<ProcessDto> userProcesses(Integer userId) throws Exception;
 
 }

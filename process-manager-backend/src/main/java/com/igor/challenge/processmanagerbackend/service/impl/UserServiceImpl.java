@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.igor.challenge.processmanagerbackend.domain.Profile;
 import com.igor.challenge.processmanagerbackend.domain.User;
+import com.igor.challenge.processmanagerbackend.exception.CpfViolationException;
 import com.igor.challenge.processmanagerbackend.exception.DataIntegrityException;
 import com.igor.challenge.processmanagerbackend.repository.UserRepository;
 import com.igor.challenge.processmanagerbackend.service.UserService;
@@ -25,13 +27,25 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User add(User user) {
-		return repository.save(user);
+	public User add(User user) throws CpfViolationException {
+		trySaveUser(user);
+		return trySaveUser(user);
+	}
+
+	private User trySaveUser(User user) throws CpfViolationException {
+		User newUser = new User();
+		try {
+			 newUser = repository.save(user);
+		} catch(DataIntegrityViolationException ex) {
+			throw new CpfViolationException("CPF já cadastrado"); 
+		}
+		return newUser;
 	}
 
 	@Override
-	public User update(User user) {
-		return repository.save(user);
+	public User update(User user) throws CpfViolationException {
+		trySaveUser(user);
+		return trySaveUser(user);
 	}
 
 	@Override
@@ -59,6 +73,13 @@ public class UserServiceImpl implements UserService {
 			throw new NoSuchElementException("Usuário inexistente");
 
 		return list.get(0);
+	}
+
+	@Override
+	public List<User> findOperators() {
+		Profile profile = new Profile();
+		profile.setId(3);
+		return repository.findByProfile(profile);
 	}
 
 }

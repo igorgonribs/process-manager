@@ -14,6 +14,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { operations } from './../../utils/operations';
 import { convertJavascriptDateToBackendDate, convertBackenddateToJavascriptDate } from '../../utils/date';
 import { resolveStatusIdByStatusName, resolveStatusNameByStatusId } from '../../utils/process-status';
+import { getUserLogged } from '../../utils/loginLogout';
 import AppMenu from '../../components/app-menu/app-menu';
 import api from '../../services/api';
 import './AddEditProcess.css';
@@ -80,7 +81,7 @@ function AddEditProcess() {
 
     // Busca usuários operadores
     React.useEffect(() => {
-        api.get("user").then(response => {
+        api.get("user/operators").then(response => {
             const usersList = response.data.map(x => { return { value: x.id.toString(), label: x.name } });
             setUserOperatorList(usersList);
         }
@@ -90,10 +91,6 @@ function AddEditProcess() {
     const onSortEnd = ({ oldIndex, newIndex }) => {
         const newValue = arrayMove(fieldResponsibles, oldIndex, newIndex);
         setFieldResponsibles(newValue);
-        console.log(
-            'Values sorted:',
-            newValue.map(i => i.id)
-        );
     };
 
     const handleClose = () => {
@@ -103,14 +100,12 @@ function AddEditProcess() {
     const handleClickDone = () => {
         setLoading(true);
 
-        // Rever createdby e status
         const newProcess = {
             id: currentProcess.id,
             name: fieldName,
             description: fieldDescription,
             expectedReportDate: convertJavascriptDateToBackendDate(fieldDeadline),
-            users: fieldResponsibles.map(x => { return { id: x.value } }),
-            createdBy: { id: 2 }
+            users: fieldResponsibles.map(x => { return { id: x.value } })
         };
 
         if (currentProcess.id != null) {
@@ -129,6 +124,7 @@ function AddEditProcess() {
                 setLoading(false);
             });
         } else {
+            newProcess.createdBy = { id: getUserLogged().id };
             api.post("process", newProcess).then(response => {
                 setModalTitle("Pronto");
                 setModalText("Processo criado");

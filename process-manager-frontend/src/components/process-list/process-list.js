@@ -20,12 +20,21 @@ export default function ProcessList() {
     const [processesList, setProcessesList] = React.useState(null);
 
     React.useEffect(() => {
-
-        api.get('process').then(response => {
-            setProcessesList(response.data)
-        }).catch(error => {
-            setProcessesList([]);
-        });
+        const userLogged = getUserLogged();
+        if(userLogged.profile.id == permissions.operator) {
+            api.get(`report/mine/${userLogged.id}`).then(response => {
+                setProcessesList(response.data)
+            }).catch(error => {
+                setProcessesList([]);
+            });
+        }
+        else {
+            api.get('process').then(response => {
+                setProcessesList(response.data)
+            }).catch(error => {
+                setProcessesList([]);
+            });
+        }
     }, []);
 
     const resolveNumberOfReportsPending = process => {
@@ -110,21 +119,6 @@ export default function ProcessList() {
 
                                     <ListItemSecondaryAction>
                                         {resolveButtonsToDisplay(process)}
-                                        {/* <Link to={`/add-edit-process/edit/${process.id}`}>
-                                            <Fab color="primary" aria-label="edit" size="medium" >
-                                                <FiEdit />
-                                            </Fab>
-                                        </Link>
-                                        <Link to={`/add-edit-process/view/${process.id}`}>
-                                            <Fab color="secondary" aria-label="view" size="medium" >
-                                                <FiEye />
-                                            </Fab>
-                                        </Link>
-                                        <Link to={`/process/report/${process.id}`}>
-                                            <Fab color="secondary" aria-label="report" size="medium" >
-                                                <FiFile />
-                                            </Fab>
-                                        </Link> */}
                                     </ListItemSecondaryAction>
                                 </ListItem>
                                 <Divider />

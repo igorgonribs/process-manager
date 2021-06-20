@@ -2,13 +2,16 @@ package com.igor.challenge.processmanagerbackend.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.igor.challenge.processmanagerbackend.domain.Process;
+import com.igor.challenge.processmanagerbackend.domain.User;
 import com.igor.challenge.processmanagerbackend.dto.ProcessDto;
 import com.igor.challenge.processmanagerbackend.enums.ProcessStatus;
 import com.igor.challenge.processmanagerbackend.repository.ProcessRepository;
@@ -87,5 +90,22 @@ public class ProcessServiceimpl implements ProcessService {
 		dto.setName(process.getName());
 		dto.setReports(process.getReports());
 		dto.setUsers(process.getUsers());
+	}
+
+	@Override
+	public List<ProcessDto> userProcesses(Integer userId) throws Exception {
+		User user = new User();
+		user.setId(userId);
+		Set<User> setUsers = new HashSet<User>();
+		setUsers.add(user);
+		List<Process> processes = processRepository.findAllByUsersIn(setUsers);
+
+		List<ProcessDto> dtos = new ArrayList<ProcessDto>();
+		for (Process process : processes) {
+			ProcessDto dto = new ProcessDto();
+			convertDomainClassToDto(dto, process);
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 }

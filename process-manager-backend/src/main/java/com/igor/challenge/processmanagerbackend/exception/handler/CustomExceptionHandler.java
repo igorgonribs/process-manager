@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.igor.challenge.processmanagerbackend.exception.CpfViolationException;
 import com.igor.challenge.processmanagerbackend.exception.DataIntegrityException;
 import com.igor.challenge.processmanagerbackend.exception.InvalidStatusException;
 
@@ -30,6 +31,12 @@ public class CustomExceptionHandler {
 
 	@ExceptionHandler(DataIntegrityException.class)
 	public ResponseEntity<?> dataIntegrityException(DataIntegrityException e) {
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	}
+
+	@ExceptionHandler(CpfViolationException.class)
+	public ResponseEntity<?> cpfViolationException(CpfViolationException e) {
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}

@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import com.igor.challenge.processmanagerbackend.domain.User;
+import com.igor.challenge.processmanagerbackend.exception.CpfViolationException;
 import com.igor.challenge.processmanagerbackend.exception.DataIntegrityException;
 
 public interface UserService {
 
-	User add(User newUser);
+	User add(User newUser) throws CpfViolationException;
 
-	User update(User user);
+	User update(User user) throws CpfViolationException;
 
 	void delete(Integer id) throws DataIntegrityException ;
 
@@ -19,5 +20,7 @@ public interface UserService {
 	Optional<User> findById(Integer id);
 	
 	User findByCpf(String cpf);
+	
+	List<User> findOperators();
 
 }
