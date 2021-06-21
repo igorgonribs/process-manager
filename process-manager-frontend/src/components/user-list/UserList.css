@@ -15,4 +15,13 @@
 p {
     color: black;
 }
-  
+
+@media screen and (max-width: 600px) {
+    .UserList-list-item-header {
+        display: none
+    }
+    
+    .UserList-item-text, .UserList-item-subtext {
+        font-size: medium;
+    }
+}

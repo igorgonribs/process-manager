@@ -79,4 +79,13 @@
 p {
     color: black;
 }
-  
+
+@media screen and (max-width: 600px) {
+    .Process-list-item-header {
+        display: none
+    }
+    .ProcessList-Second-Line-process-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

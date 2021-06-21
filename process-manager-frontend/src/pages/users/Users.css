@@ -92,3 +92,13 @@
   align-items: center;
   padding-top: 12px;
 }
+
+@media screen and (max-width: 600px) {
+  .Users-list {
+    width: 90%;
+  }
+
+  .Users-Header-title {
+    padding: 20px;
+  }
+}

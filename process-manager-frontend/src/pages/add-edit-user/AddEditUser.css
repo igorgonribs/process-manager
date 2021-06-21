@@ -128,3 +128,13 @@ button {
   height: 42px;
   font-size: 18px;
 }
+
+@media screen and (max-width: 600px) {
+  .AddEditUser-form {
+    width: 90%;
+  }
+
+  .AddEditUser-Header-title {
+    padding: 20px;
+  }
+}

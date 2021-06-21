@@ -82,9 +82,9 @@ function AppMenu({ pageName, addButtonLink, goBack }) {
                             {resolveGoBack()}
                         </div>
                         <div className="App-appbar-title">
-                            <Typography variant="h6" >
-                                {/* {pageName} */ "Olá, " + getUserLogged().name}
-                            </Typography>
+                            <h5>
+                                {"Olá, " + getUserLogged().name}
+                            </h5>
                         </div>
                         {resolveAddButton()}
 

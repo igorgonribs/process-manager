@@ -73,9 +73,12 @@ export default function UserList() {
                         return (
                             <>
                                 <ListItem key={user.id} role={undefined} dense button style={{ paddingLeft: 40 }}>
-                                    <ListItemIcon>
-                                        <FiUserCheck />
-                                    </ListItemIcon>
+                                    <div className="UserList-list-item-header">
+                                        <ListItemIcon>
+                                            <FiUserCheck />
+                                        </ListItemIcon>
+
+                                    </div>
 
                                     <div>
                                         <p className="UserList-item-text" >{user.name}</p>

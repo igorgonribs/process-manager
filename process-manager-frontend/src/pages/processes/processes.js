@@ -1,6 +1,4 @@
-import { FiSettings, FiPlusCircle } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import { FiSettings } from 'react-icons/fi';
 
 import ProcessList from './../../components/process-list/process-list';
 import AppMenu from '../../components/app-menu/app-menu';

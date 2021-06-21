@@ -160,3 +160,16 @@ textarea {
   height: 160px;
   font-size: 16px;
 }
+
+@media screen and (max-width: 600px) {
+  .Report-form {
+    width: 90%;
+  }
+
+  .Report-form-line {
+    align-items: flex-start;
+  }
+  .Report-Header-title {
+    padding: 20px;
+  }
+}

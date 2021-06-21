@@ -140,3 +140,13 @@ textarea {
   height: 80px;
   font-size: 18px;
 }
+
+@media screen and (max-width: 600px) {
+  .AddEditProcess-form {
+    width: 90%;
+  }
+
+  .AddEditProcess-Header-title {
+    padding: 20px;
+  }
+}
