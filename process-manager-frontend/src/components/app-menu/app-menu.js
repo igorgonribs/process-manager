@@ -11,7 +11,7 @@ import { getUserLogged } from '../../utils/loginLogout';
 import { permissions } from '../../utils/permissions';
 import "./AppMenu.css";
 
-function AppMenu({ pageName, addButtonLink, goBack }) {
+function AppMenu({ addButtonLink, goBack }) {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
