@@ -1,7 +1,6 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -37,8 +36,18 @@ function AppMenu({ pageName, addButtonLink, goBack }) {
         return;
     }
 
+    const resolveCanAddItem = () => {
+        if(addButtonLink.includes("user") && (getUserLogged().profile.id != permissions.adm))
+            return false;
+
+        else if(addButtonLink.includes("process") && (getUserLogged().profile.id != permissions.triage))
+            return false;
+
+        else return true;
+    }
+
     const resolveAddButton = () => {
-        if (addButtonLink)
+        if (addButtonLink && resolveCanAddItem())
             return (
                 <div className="App-appbar-add-button">
                     <IconButton edge="start" color="inherit" aria-label="add" onClick={() => history.push(addButtonLink)}>
